@@ -100,6 +100,11 @@ class HBNBCommand(cmd.Cmd):
         storage.save()
 
     def do_all(self, args):
+        """
+        Prints all string representation of all instances based
+        or not on the class name
+        Usage: $ all BaseModel or $ all
+        """
         if not args:
             print([str(obj) for obj in storage.all().values()])
             return
