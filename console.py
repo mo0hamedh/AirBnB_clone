@@ -20,7 +20,7 @@ class HBNBCommand(cmd.Cmd):
 
     prompt = "(hbnb) "
     __classes = ["BaseModel", "User", "State", "City", "Place", "Amenity",
-                "Review"]
+                 "Review"]
 
     def do_quit(self, args):
         """
@@ -28,14 +28,14 @@ class HBNBCommand(cmd.Cmd):
         Usage: quit
         """
         return True
-    
+
     def do_EOF(self, args):
         """
         EOF command to exit the program
         Usage: Ctrl+d
         """
         return True
-    
+
     def emptyline(self):
         """Emptyline handler that does nothing with Enter key"""
         pass
@@ -53,10 +53,10 @@ class HBNBCommand(cmd.Cmd):
         if args[0] not in HBNBCommand.__classes:
             print("** class doesn't exist **")
             return
-        new_instace = eval(args[0])() # to create an instance
+        new_instace = eval(args[0])()  # to create an instance
         new_instace.save()
         print(new_instace.id)
-    
+
     def do_show(self, args):
         """
         Prints the string representation of an
@@ -77,7 +77,7 @@ class HBNBCommand(cmd.Cmd):
             print("** no instance found **")
             return
         print(storage.all()[f'{args[0]}.{args[1]}'])
-    
+
     def do_destroy(self, args):
         """
         Deletes an instance based on the class name and id
@@ -98,26 +98,7 @@ class HBNBCommand(cmd.Cmd):
             return
         del storage.all()[f'{args[0]}.{args[1]}']
         storage.save()
-    
-    """
-    def do_all(self, args):
-        args = args.split()
-        objs = []
-        if not args:
-            for obj in storage.all().values():
-                objs.append(str(obj))
-            print(objs)
-            return
-        if args[0] not in globals():
-            print(" class doesn't exist ")
-            return
-        objs = globals()[args[0]].all()
-        objs_list = []
-        for obj in objs.values():
-            objs_list.append(str(obj))
-        print(objs_list)
-    
-    """
+
     def do_all(self, args):
         if not args:
             print([str(obj) for obj in storage.all().values()])
@@ -157,7 +138,7 @@ class HBNBCommand(cmd.Cmd):
         if len(args) < 4:
             print("** value missing **")
             return
-        
+
         # casting value to the correct type, trying int then float and string
         if args[3].isdigit():
             new_value = int(args[3])
@@ -173,7 +154,10 @@ class HBNBCommand(cmd.Cmd):
                 return
 
     def do_count(self, args):
-        """retrieve the number of instances of a class: <class name>.count()."""
+        """
+        retrieve the number of instances of a class
+        Usage: <class name>.count().
+        """
         if not args:
             print("** class doesn't exist **")
         objects = storage.all()
@@ -193,7 +177,7 @@ class HBNBCommand(cmd.Cmd):
         if '.' in line:
             objects = storage.all()
             cls, method = line.split('.')
-                
+
             if method == 'all()':
                 self.do_all(cls)
             if method == 'count()':
@@ -203,6 +187,7 @@ class HBNBCommand(cmd.Cmd):
                     if cls == item.__class__.__name__:
                         count += 1
                 print(count)"""
+
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
