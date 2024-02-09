@@ -192,6 +192,33 @@ class HBNBCommand(cmd.Cmd):
                     if cls == item.__class__.__name__:
                         count += 1
                 print(count)"""
+        
+        # check this 
+        if '.' in line:
+            objects = storage.all()
+            cls, method = line.split('.')
+        
+        # Parse method to get arguments
+        if '(' in method and ')' in method:
+            method_name, args_str = method.split('(')
+            args_str = args_str.strip(')')
+        else:
+            print("** missing ')' **")
+            return
+        
+        # Execute method based on parsed arguments
+        if method_name == 'show':
+            args = args_str.split(',')
+            if len(args) == 1:
+                self.do_show(f"{cls.strip()} {args_str.strip()}")
+            else:
+                print("** invalid arguments **")
+        elif method_name == 'all':
+            self.do_all(cls.strip())
+        elif method_name == 'count':
+            self.do_count(cls.strip())
+        else:
+            print("** unknown method **")
 
 
 if __name__ == '__main__':
