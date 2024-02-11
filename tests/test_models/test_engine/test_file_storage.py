@@ -26,6 +26,7 @@ class TestFileStorage(unittest.TestCase):
         create an instance of class withexpected kwargs
         """
         self.assertIsInstance(self.my_storage.all(), dict)
+        self.assertIsInstance(self.objs[self.keyname], BaseModel)
 
     def test_new_all_methods(self):
         """Testing new and all methods"""
@@ -38,7 +39,6 @@ class TestFileStorage(unittest.TestCase):
             json_objects = json.load(f)
         json_obj = json_objects[self.keyname]
         self.assertEqual(json_obj, self.base_obj.to_dict())
-        self.assertIn(self.keyname, json_objects)
 
     def test_z_reload_method(self):
         """
