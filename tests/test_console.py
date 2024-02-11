@@ -5,7 +5,7 @@ import unittest
 from console import HBNBCommand
 from unittest.mock import patch
 from io import StringIO
-import uuid
+from models.base_model import BaseModel
 
 
 class TestConsole(unittest.TestCase):
@@ -79,3 +79,51 @@ class TestConsole(unittest.TestCase):
         with patch('sys.stdout', new=StringIO()) as f:
             HBNBCommand().onecmd('show User 123')
             self.assertEqual(f.getvalue(), "** no instance found **\n")
+
+    def test_destroy(self):
+        """Testing destroy command"""
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd('destroy')
+            self.assertEqual(f.getvalue(), "** class name missing **\n")
+
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd('destroy random')
+            self.assertEqual(f.getvalue(), "** class doesn't exist **\n")
+
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd('destroy User')
+            self.assertEqual(f.getvalue(), "** instance id missing **\n")
+
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd('destroy User 123')
+            self.assertEqual(f.getvalue(), "** no instance found **\n")
+
+    def test_all(self):
+        """Testing all command"""
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd('all random')
+            self.assertEqual(f.getvalue(), "** class doesn't exist **\n")
+
+    def test_update(self):
+        """Testing update command"""
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd('update')
+            self.assertEqual(f.getvalue(), "** class name missing **\n")
+
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd('update random')
+            self.assertEqual(f.getvalue(), "** class doesn't exist **\n")
+
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd('update User')
+            self.assertEqual(f.getvalue(), "** instance id missing **\n")
+
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd('update User 123')
+            self.assertEqual(f.getvalue(), "** no instance found **\n")
+
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd("create User")  # Creating user to get id
+            with patch('sys.stdout', new=StringIO()) as f_2:
+                HBNBCommand().onecmd(f"update User {f.getvalue()} name Toot")
+                self.assertEqual(f_2.getvalue(), '')
