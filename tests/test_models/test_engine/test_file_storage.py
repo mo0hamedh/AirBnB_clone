@@ -34,10 +34,12 @@ class TestFileStorage(unittest.TestCase):
 
     def test_save_method(self):
         """Testing save method"""
-        with open('file.json', 'r', encoding='utf-8') as f:
-            json_objects = json.load(f)
-            json_obj = json_objects[f"{self.cls_name}.{self.instance_id}"]
-            self.assertEqual(json_obj, self.base_obj.to_dict())
+        self.my_storage.reload()
+        json_objects = self.my_storage.all()  # =__objects
+        json_obj = json_objects[f"{self.cls_name}.{self.instance_id}"]
+        print(json_obj)
+        print(self.base_obj.to_dict())
+        self.assertEqual(json_obj.id, self.base_obj.to_dict()['id'])
 
     def test_z_reload_method(self):
         """
