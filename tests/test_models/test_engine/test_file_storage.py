@@ -30,8 +30,10 @@ class TestFileStorage(unittest.TestCase):
 
     def test_new_all_methods(self):
         """Testing new and all methods"""
-        obj = self.objs[f"{self.cls_name}.{self.instance_id}"]
+        obj = self.objs[self.keyname]
         self.assertEqual(obj, self.base_obj)
+        self.assertIsInstance(self.objs, dict)
+        self.assertNotEqual(self.objs, {})
 
     def test_save_method(self):
         """Testing save method"""
