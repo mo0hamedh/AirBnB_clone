@@ -1,70 +1,74 @@
 #!/usr/bin/python3
-""" unit test for bases """
-
+"""
+Unittest for base model
+"""
 import unittest
+from models.engine.file_storage import FileStorage
 from models.base_model import BaseModel
-import models
 import json
+import models
 import os
 
 
-class FileStorageTestCase(unittest.TestCase):
-    """ class for base test """
+class TestFileStorage(unittest.TestCase):
+    """
+    Test class for FileStorage
+    """
+    my_storage = FileStorage()
+    base_obj = BaseModel()
+    my_storage.new(base_obj)
+    objs = my_storage.all()
+    my_storage.save()  # this saved it to file.json
+    cls_name = "BaseModel"
+    instance_id = base_obj.id
+    keyname = "BaseModel."+instance_id
+    filepath = models.storage._FileStorage__file_path
+    _objects = models.storage._FileStorage__objects
 
-    def test_FileStorage_init(self):
-        """ DOC DOC DOC """
-        filepath = models.storage._FileStorage__file_path
-        _objs = models.storage._FileStorage__objects
-        """check class attr"""
-        self.assertEqual(filepath, "file.json")
-        self.assertIsInstance(filepath, str)
-        self.assertIsInstance(_objs, dict)
-        new = BaseModel()
-        """ check if it have methods """
-        self.assertTrue(hasattr(new, "__init__"))
-        self.assertTrue(hasattr(new, "__str__"))
-        self.assertTrue(hasattr(new, "save"))
-        self.assertTrue(hasattr(new, "to_dict"))
+    def test_filestorage(self):
+        """
+        create an instance of class withexpected kwargs
+        """
+        self.assertEqual(self.filepath, "file.json")
+        self.assertIsInstance(self.filepath, str)
+        self.assertIsInstance(self._objects, dict)
+        self.assertIsInstance(self.my_storage.all(), dict)
+        self.assertIsInstance(self.objs[self.keyname], BaseModel)
+        self.assertTrue(hasattr(self.base_obj, 'id'))
+        self.assertIsInstance(self.base_obj.id, str)
+        self.assertTrue(hasattr(self.base_obj, "__init__"))
+        self.assertTrue(hasattr(self.base_obj, "__str__"))
+        self.assertTrue(hasattr(self.base_obj, "save"))
+        self.assertTrue(hasattr(self.base_obj, "to_dict"))
 
-        """test all"""
-        self.assertIsInstance(models.storage.all(), dict)
-        self.assertNotEqual(models.storage.all(), {})
-        """existence id"""
-        self.assertTrue(hasattr(new, "id"))
-        self.assertIsInstance(new.id, str)
+    def test_new_all_methods(self):
+        """Testing new and all methods"""
+        obj = self.objs[self.keyname]
+        self.assertEqual(obj, self.base_obj)
+        self.assertIsInstance(self.objs, dict)
+        self.assertNotEqual(self.objs, {})
 
-        """new"""
-        keyname = "BaseModel."+new.id
-        self.assertIsInstance(models.storage.all()[keyname], BaseModel)
-        self.assertEqual(models.storage.all()[keyname], new)
-        """ check if object exist by keyname """
-        self.assertIn(keyname, models.storage.all())
-        """ check if the object found in storage with corrrect id"""
-        self.assertTrue(models.storage.all()[keyname] is new)
+    def test_save_method(self):
+        """Testing save method"""
+        with open('file.json', 'r', encoding='utf-8') as f:
+            json_objects = json.load(f)
+        json_obj = json_objects[self.keyname]
+        self.assertIn(self.keyname, json_objects)
+        self.assertEqual(json_obj, self.base_obj.to_dict())
 
-        """save"""
-        models.storage.save()
-        with open(filepath, 'r') as file:
-            saved_data = json.load(file)
-        """ check if object exist by keyname """
-        self.assertIn(keyname, saved_data)
-        """ check if the value found in json is correct"""
-        self.assertEqual(saved_data[keyname], new.to_dict())
+    def test_z_reload_method(self):
+        """
+        Testing reload method
+        added z to method name to run last
+        """
+        self.objs.clear()
+        self.my_storage.reload()
+        with open('file.json', 'r', encoding='utf-8') as f:
+            json_objects = json.load(f)
+        self.assertEqual(json_objects[self.keyname],
+                         self.objs[self.keyname].to_dict())
 
-        """reload"""
-        models.storage.all().clear()
-        models.storage.reload()
-        with open(filepath, 'r') as file:
-            saved_data = json.load(file)
-        self.assertEqual(saved_data[keyname],
-                         models.storage.all()[keyname].to_dict())
-
-        """file"""
-        if os.path.exists(filepath):
-            os.remove(filepath)
-        self.assertFalse(os.path.exists(filepath))
-        models.storage.reload()
-
-
-if __name__ == '__main__':
-    unittest.main()
+        if os.path.exists(self.filepath):
+            os.remove(self.filepath)
+        self.assertFalse(os.path.exists(self.filepath))
+        self.my_storage.reload()
