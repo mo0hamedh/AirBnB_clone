@@ -6,6 +6,7 @@ import unittest
 from models.engine.file_storage import FileStorage
 from models.base_model import BaseModel
 import json
+import models
 
 
 class TestFileStorage(unittest.TestCase):
@@ -20,11 +21,16 @@ class TestFileStorage(unittest.TestCase):
     cls_name = "BaseModel"
     instance_id = base_obj.id
     keyname = "BaseModel."+instance_id
+    filepath = models.storage._FileStorage__file_path
+    _objects = models.storage._FileStorage__objects
 
     def test_filestorage(self):
         """
         create an instance of class withexpected kwargs
         """
+        self.assertEqual(self.filepath, "file.json")
+        self.assertIsInstance(self.filepath, str)
+        self.assertIsInstance(self._objects, dict)
         self.assertIsInstance(self.my_storage.all(), dict)
         self.assertIsInstance(self.objs[self.keyname], BaseModel)
         self.assertTrue(hasattr(self.base_obj, 'id'))
