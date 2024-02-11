@@ -46,6 +46,6 @@ class FileStorage:
                 data = json.load(fp)
             for k, v in data.items():
                 cls_name = v['__class__']
-                self.__objects[k] = eval(f"{cls_name}(**{v})")
+                FileStorage.__objects[k] = eval(f"{cls_name}(**{v})")
         except FileNotFoundError:
             pass
