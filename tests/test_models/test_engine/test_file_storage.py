@@ -52,6 +52,7 @@ class TestFileStorage(unittest.TestCase):
         with open('file.json', 'r', encoding='utf-8') as f:
             json_objects = json.load(f)
         json_obj = json_objects[self.keyname]
+        self.assertIn(self.keyname, json_objects)
         self.assertEqual(json_obj, self.base_obj.to_dict())
 
     def test_z_reload_method(self):
