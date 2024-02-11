@@ -7,6 +7,7 @@ from models.engine.file_storage import FileStorage
 from models.base_model import BaseModel
 import json
 import models
+import os
 
 
 class TestFileStorage(unittest.TestCase):
@@ -66,3 +67,8 @@ class TestFileStorage(unittest.TestCase):
             json_objects = json.load(f)
         self.assertEqual(json_objects[self.keyname],
                          self.objs[self.keyname].to_dict())
+
+        if os.path.exists(self.filepath):
+            os.remove(self.filepath)
+        self.assertFalse(os.path.exists(self.filepath))
+        self.my_storage.reload()
