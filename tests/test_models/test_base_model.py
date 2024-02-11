@@ -17,7 +17,8 @@ class TestBaseModel(unittest.TestCase):
         """Creating instance for my tests"""
         print(f"Setting Up Instance of BaseModel for {self._testMethodName}")
         self.obj = BaseModel()
-        self.obj.test = "AAA"
+        self.obj.name = "My_First_Model"
+        self.obj.my_number = 89
 
     def test_basemodel_no_kwargs(self):
         """
@@ -25,11 +26,10 @@ class TestBaseModel(unittest.TestCase):
         """
         self.assertIsInstance(self.obj, BaseModel)
         self.assertIsInstance(self.obj.id, str)
-        self.assertNotIsInstance(self.obj.id, int)
-        self.assertNotIsInstance(self.obj.id, float)
         self.assertIsInstance(self.obj.created_at, datetime)
         self.assertIsInstance(self.obj.updated_at, datetime)
-        self.assertEqual(self.obj.test, "AAA")
+        self.assertEqual(self.obj.name, "My_First_Model")
+        self.assertEqual(self.obj.my_number, 89)
 
     def test_basemodel_with_kwargs(self):
         """
@@ -41,7 +41,8 @@ class TestBaseModel(unittest.TestCase):
         self.assertIsInstance(new_obj.id, str)
         self.assertIsInstance(new_obj.created_at, datetime)
         self.assertIsInstance(new_obj.updated_at, datetime)
-        self.assertEqual(new_obj.test, "AAA")
+        self.assertEqual(new_obj.name, "My_First_Model")
+        self.assertEqual(new_obj.my_number, 89)
         self.assertNotEqual(new_obj, self.obj)
 
     def test_string_representation(self):
