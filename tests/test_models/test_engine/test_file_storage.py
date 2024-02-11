@@ -36,8 +36,9 @@ class TestFileStorage(unittest.TestCase):
         """Testing save method"""
         with open('file.json', 'r', encoding='utf-8') as f:
             json_objects = json.load(f)
-            json_obj = json_objects[self.keyname]
-            self.assertEqual(json_obj, self.base_obj.to_dict())
+        json_obj = json_objects[self.keyname]
+        self.assertEqual(json_obj, self.base_obj.to_dict())
+        self.assertIn(self.keyname, json_objects)
 
     def test_z_reload_method(self):
         """
@@ -50,10 +51,3 @@ class TestFileStorage(unittest.TestCase):
             json_objects = json.load(f)
         self.assertEqual(json_objects[self.keyname],
                          self.objs[self.keyname].to_dict())
-        """for k, v in json_objects.items():
-            cls = v['__class__']
-            self.assertEqual(str(self.objs[k]), str(
-                eval(f"{cls}(**{v})")))
-        self.assertEqual(str(self.base_obj), str(
-            eval(f"{self.cls_name}(**{self.base_obj}.to_dict()")))
-        """
