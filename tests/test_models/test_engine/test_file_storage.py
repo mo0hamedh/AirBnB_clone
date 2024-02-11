@@ -35,6 +35,10 @@ class TestFileStorage(unittest.TestCase):
         self.assertIsInstance(self.objs[self.keyname], BaseModel)
         self.assertTrue(hasattr(self.base_obj, 'id'))
         self.assertIsInstance(self.base_obj.id, str)
+        self.assertTrue(hasattr(self.base_obj, "__init__"))
+        self.assertTrue(hasattr(self.base_obj, "__str__"))
+        self.assertTrue(hasattr(self.base_obj, "save"))
+        self.assertTrue(hasattr(self.base_obj, "to_dict"))
 
     def test_new_all_methods(self):
         """Testing new and all methods"""
