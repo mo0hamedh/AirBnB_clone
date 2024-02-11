@@ -23,7 +23,6 @@ class TestBaseModel(unittest.TestCase):
         """
         create an instance of class withexpected kwargs
         """
-        self.obj.test = "AAA"
         self.assertIsInstance(self.obj, BaseModel)
         self.assertIsInstance(self.obj.id, str)
         self.assertNotIsInstance(self.obj.id, int)
