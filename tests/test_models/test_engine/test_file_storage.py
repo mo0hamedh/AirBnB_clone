@@ -17,8 +17,9 @@ class TestFileStorage(unittest.TestCase):
     my_storage.new(base_obj)
     objs = my_storage.all()
     my_storage.save()  # this saved it to file.json
-    cls_name = base_obj.__class__.__name__
+    cls_name = "BaseModel"
     instance_id = base_obj.id
+    keyname = "BaseModel."+instance_id
 
     def test_filestorage(self):
         """
@@ -35,7 +36,7 @@ class TestFileStorage(unittest.TestCase):
         """Testing save method"""
         with open('file.json', 'r', encoding='utf-8') as f:
             json_objects = json.load(f)
-            json_obj = json_objects[f"{self.cls_name}.{self.instance_id}"]
+            json_obj = json_objects[self.keyname]
             self.assertEqual(json_obj, self.base_obj.to_dict())
 
     def test_z_reload_method(self):
@@ -43,10 +44,16 @@ class TestFileStorage(unittest.TestCase):
         Testing reload method
         added z to method name to run last
         """
+        self.objs.clear()
         self.my_storage.reload()
         with open('file.json', 'r', encoding='utf-8') as f:
             json_objects = json.load(f)
-        for k, v in json_objects.items():
-            cls_name = v['__class__']
+        self.assertEqual(json_objects[self.keyname],
+                         self.objs[self.keyname].to_dict())
+        """for k, v in json_objects.items():
+            cls = v['__class__']
             self.assertEqual(str(self.objs[k]), str(
-                eval(f"{cls_name}(**{v})")))
+                eval(f"{cls}(**{v})")))
+        self.assertEqual(str(self.base_obj), str(
+            eval(f"{self.cls_name}(**{self.base_obj}.to_dict()")))
+        """
